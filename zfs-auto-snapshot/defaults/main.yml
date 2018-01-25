@@ -1,0 +1,25 @@
+---
+# How often the 'frequent' snapshots occur. Can be anything from 1 to 59
+zfs_keep_frequent_interval: 15
+
+# Count how many snapshots we can have before deleting.
+zfs_keep_frequent: 4
+zfs_keep_hourly: 24
+zfs_keep_daily: 31
+zfs_keep_weekly: 8
+zfs_keep_monthly: 12
+
+# The dictionary with the datasets.
+# Example:
+# zfs_datasets:
+#   tank/set1:
+#     hourly: true
+#   tank/set2:
+#     enabled: false
+#     frequent: true
+zfs_datasets: {}
+
+# Should we download the most recent script?
+autosnap_update: false
+# The arguments to append to the script.
+autosnap_args: "--quiet --syslog --default-exclude"

@@ -1,0 +1,2 @@
+---
+autosnap_bin: /usr/local/sbin/zfs-auto-snapshot.sh

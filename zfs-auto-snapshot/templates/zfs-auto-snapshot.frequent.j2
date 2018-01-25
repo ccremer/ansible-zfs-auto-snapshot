@@ -1,0 +1,3 @@
+# Created with ansible role "zfs-auto-snapshot"
+PATH="/usr/bin:/bin:/usr/local/sbin:/usr/sbin:/sbin"
+*/{{ zfs_keep_frequent_interval }} * * * * root {{ autosnap_bin }} {{ autosnap_args }} --label=frequent --keep={{ zfs_keep_frequent }} //

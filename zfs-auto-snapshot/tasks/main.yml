@@ -1,0 +1,57 @@
+---
+# Install
+- name: Create target dir
+  file:
+    path: /usr/local/sbin
+    group: root
+    owner: root
+    state: directory
+    mode: 0755
+  become: true
+
+- name: Download script
+  get_url:
+      url: https://raw.githubusercontent.com/zfsonlinux/zfs-auto-snapshot/master/src/zfs-auto-snapshot.sh
+      force: "{{ autosnap_update }}"
+      mode: 0755
+      dest: "{{ autosnap_bin }}"
+      group: root
+      owner: root
+  become: true
+
+- name: Download man page
+  get_url:
+      url: https://raw.githubusercontent.com/zfsonlinux/zfs-auto-snapshot/master/src/zfs-auto-snapshot.8
+      force: "{{ autosnap_update }}"
+      mode: 0644
+      dest: /usr/share/man/man8/zfs-auto-snapshot.8
+      group: root
+      owner: root
+  become: true
+
+# Install cron files
+- include_tasks: replace-cron-job.yml label=hourly keep={{ zfs_keep_hourly }}
+- include_tasks: replace-cron-job.yml label=daily keep={{ zfs_keep_daily }}
+- include_tasks: replace-cron-job.yml label=weekly keep={{ zfs_keep_weekly }}
+- include_tasks: replace-cron-job.yml label=monthly keep={{ zfs_keep_monthly }}
+
+- name: Set up frequent cron file
+  template:
+    src: zfs-auto-snapshot.frequent.j2
+    dest: /etc/cron.d/zfs-auto-snapshot
+    owner: root
+    group: root
+    mode: 0755
+  become: true
+
+# Set the ZFS properties
+- name: Update ZFS 'enabled' properties
+  command: zfs set com.sum:auto-snapshot={{ item.value.enabled | default(true) | lower }} {{ item.key }}
+  become: true
+  with_dict: "{{ zfs_datasets }}"
+
+- include_tasks: update-zfs-property.yml label=frequent
+- include_tasks: update-zfs-property.yml label=hourly
+- include_tasks: update-zfs-property.yml label=daily
+- include_tasks: update-zfs-property.yml label=weekly
+- include_tasks: update-zfs-property.yml label=monthly

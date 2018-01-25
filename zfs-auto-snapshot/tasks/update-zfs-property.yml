@@ -1,0 +1,5 @@
+---
+- name: Update ZFS '{{ label }}' properties
+  command: zfs set com.sun:auto-snapshot:{{ label }}={{ item.value[label] | default(false) | lower }} {{ item.key }}
+  become: true
+  with_dict: "{{ zfs_datasets }}"
