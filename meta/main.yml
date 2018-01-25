@@ -4,19 +4,16 @@ dependencies: []
 galaxy_info:
   author: ccremer
   description: >
-    Installs zfs-auto-snapshot for automatic snapshotting your ZFS datasets. Cron and ZFS need to be installed,
-    with 'zfs' in $PATH.
-    Fails on inexistent datasets and requires root access (sudo is sufficient). Tested on Debian.
-    By default, ALL datasets will get snapshots. Override "autosnap_args" (which defaults to '--quiet --syslog')
-    and add "--default-exclude" to enable snapshots only to those configured in "zfs_datasets" variable.
+    Installs zfs-auto-snapshot for creating snapshots of your ZFS datasets. Cron and ZFS need to be installed.
   license: "license (MIT)"
   min_ansible_version: 2.0
   platforms:
   - name: Debian
     versions:
       - all
-  - name: Centos
+  - name: CentOS
     versions:
       - all
   galaxy_tags:
     - system
+    - storage
