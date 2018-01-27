@@ -23,7 +23,6 @@ Example usage:
         frequent: true
         daily: true
         monthly: true
-    zfs_datasets:
       tank/data/public:
         hourly: true
         daily: true
