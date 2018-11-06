@@ -10,7 +10,7 @@ This is an ansible role for installing and configuring [zfs-auto-snapshot](https
 - Root (or sudo) access
 - Internet access for ZFS hosts (download script)
 - The ZFS datasets need to exist, they won't get created
-- Should run on any system that runs POSIX shell. Though tested only on Debian. 
+- Should run on any system that runs POSIX shell. Though tested only on Debian.
 
 ## Usage
 
@@ -26,8 +26,9 @@ Example usage:
       tank/data/public:
         hourly: true
         daily: true
-  roles:
-    - { role: ccremer.zfs-auto-snapshot }
+  tasks:
+    - import_role:
+        name: ccremer.zfs-auto-snapshot
 ```
 
 ## Parameters
@@ -41,7 +42,7 @@ Advanced usage (with default values):
       tank/example/dataset:
         enabled: true
         frequent: false
-        hourly: false        
+        hourly: false
         daily: false
         weekly: false
         monthly: false
@@ -59,8 +60,9 @@ Advanced usage (with default values):
     autosnap_update: false
     # The arguments to append to the script.
     autosnap_args: "--quiet --syslog --default-exclude"
-  roles:
-    - { role: ccremer.zfs-auto-snapshot }
+  tasks:
+    - import_role:
+        name: ccremer.zfs-auto-snapshot
 ```
 
 ## Gotchas

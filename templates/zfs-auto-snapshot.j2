@@ -1,4 +1,4 @@
 #!/bin/sh
 
 # Created with ansible role "zfs-auto-snapshot"
-exec {{ autosnap_bin }} {{ autosnap_args }} --label={{ label }} --keep={{ keep }} //
+exec {{ autosnap_bin }} {{ autosnap_args }} --label={{ item.label }} --keep={{ item.keep }} //

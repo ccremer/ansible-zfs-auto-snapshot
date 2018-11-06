@@ -29,11 +29,23 @@
       owner: root
   become: true
 
-# Install cron files
-- include_tasks: replace-cron-job.yml label=hourly keep={{ zfs_keep_hourly }}
-- include_tasks: replace-cron-job.yml label=daily keep={{ zfs_keep_daily }}
-- include_tasks: replace-cron-job.yml label=weekly keep={{ zfs_keep_weekly }}
-- include_tasks: replace-cron-job.yml label=monthly keep={{ zfs_keep_monthly }}
+- name: Set up cron files
+  become: true
+  template:
+    src: zfs-auto-snapshot.j2
+    dest: "/etc/cron.{{ item.label }}/zfs-auto-snapshot"
+    owner: root
+    group: root
+    mode: 0755
+  with_items:
+    - label: hourly
+      keep: "{{ zfs_keep_hourly }}"
+    - label: daily
+      keep: "{{ zfs_keep_daily }}"
+    - label: weekly
+      keep: "{{ zfs_keep_weekly }}"
+    - label: monthly
+      keep: "{{ zfs_keep_monthly }}"
 
 - name: Set up frequent cron file
   template:
@@ -50,8 +62,23 @@
   become: true
   with_dict: "{{ zfs_datasets }}"
 
-- include_tasks: update-zfs-property.yml label=frequent
-- include_tasks: update-zfs-property.yml label=hourly
-- include_tasks: update-zfs-property.yml label=daily
-- include_tasks: update-zfs-property.yml label=weekly
-- include_tasks: update-zfs-property.yml label=monthly
+- name: Update ZFS frequent properties
+  command: zfs set com.sun:auto-snapshot:frequent={{ item.value['frequent'] | default(false) | lower }} {{ item.key }}
+  become: true
+  with_dict: "{{ zfs_datasets }}"
+- name: Update ZFS hourly properties
+  command: zfs set com.sun:auto-snapshot:hourly={{ item.value['hourly'] | default(false) | lower }} {{ item.key }}
+  become: true
+  with_dict: "{{ zfs_datasets }}"
+- name: Update ZFS daily properties
+  command: zfs set com.sun:auto-snapshot:daily={{ item.value['daily'] | default(false) | lower }} {{ item.key }}
+  become: true
+  with_dict: "{{ zfs_datasets }}"
+- name: Update ZFS weekly properties
+  command: zfs set com.sun:auto-snapshot:weekly={{ item.value['weekly'] | default(false) | lower }} {{ item.key }}
+  become: true
+  with_dict: "{{ zfs_datasets }}"
+- name: Update ZFS monthly properties
+  command: zfs set com.sun:auto-snapshot:monthly={{ item.value['monthly'] | default(false) | lower }} {{ item.key }}
+  become: true
+  with_dict: "{{ zfs_datasets }}"
