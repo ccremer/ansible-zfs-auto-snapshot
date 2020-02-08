@@ -58,7 +58,7 @@
 
 # Set the ZFS properties
 - name: Update ZFS 'enabled' properties
-  command: zfs set com.sum:auto-snapshot={{ item.value.enabled | default(true) | lower }} {{ item.key }}
+  command: zfs set com.sun:auto-snapshot={{ item.value.enabled | default(true) | lower }} {{ item.key }}
   become: true
   with_dict: "{{ zfs_datasets }}"
 
